@@ -8,7 +8,12 @@ const AdminRoutes = () => {
     <div className="flex flex-col min-h-screen">
       <Routes>
         <Route path="/dashboard" element={<AdminDashboard />} />
-        {/* Remove /login and /signup here as they are handled at the root level */}
+        <Route path="/manage-users" element={<AdminDashboard />} />
+        <Route path="/manage-drivers" element={<AdminDashboard />} />
+        <Route path="/all-requests" element={<AdminDashboard />} />
+        <Route path="/all-drivers" element={<AdminDashboard />} />
+        <Route path="/teams" element={<AdminDashboard />} />
+        <Route path="/payments" element={<AdminDashboard />} />
       </Routes>
     </div>
   );

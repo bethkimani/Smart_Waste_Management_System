@@ -1,37 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaTachometerAlt, FaUsers, FaUserShield, FaList, FaUsersCog, FaDollarSign, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaList, FaUsers, FaUserShield, FaDollarSign } from 'react-icons/fa';
 
-const AdminDashboard = () => {
-  const navigate = useNavigate();
-  const [requests, setRequests] = useState([]);
-  const [drivers, setDrivers] = useState([]);
+const AdminPanel = () => {
   const [teamStats, setTeamStats] = useState({ users: 0, admins: 0, drivers: 0 });
+  const [requests, setRequests] = useState([]);
   const [payments, setPayments] = useState([]);
+  const navigate = useNavigate();
 
-  // Mock data (replace with API calls later)
+  // Mock data for team stats and requests (replace with API calls later)
   useEffect(() => {
-    // Team stats
+    // Simulate team login counts
     setTeamStats({
       users: 15,
       admins: 3,
       drivers: 10,
     });
 
-    // Requests
+    // Simulate requests with status
     setRequests([
       { id: 1, address: '195 Ashby Road, Hinckley LE10 1SH', status: 'pending', date: '2025-06-09' },
       { id: 2, address: '123 Main St, Nairobi', status: 'approved', date: '2025-06-08' },
       { id: 3, address: '456 Hill Rd, Kenya', status: 'rejected', date: '2025-06-07' },
     ]);
 
-    // Drivers
-    setDrivers([
-      { id: 1, name: 'John Doe', status: 'Active', location: 'Nairobi' },
-      { id: 2, name: 'Jane Smith', status: 'Inactive', location: 'Hinckley' },
-    ]);
-
-    // Payments
+    // Simulate payment data from StepSix
     setPayments([
       {
         id: 1,
@@ -39,6 +32,9 @@ const AdminDashboard = () => {
         deliveryDate: '2025-06-20',
         collectionDate: '2025-06-26',
         skipSize: 5,
+        hirePeriod: '14 days',
+        price: 241.00,
+        vat: 48.20,
         total: 289.20,
         paymentMethod: 'card',
         date: '2025-06-09',
@@ -57,43 +53,33 @@ const AdminDashboard = () => {
         <h2 className="text-2xl font-bold mb-6">SmartTrash Admin</h2>
         <ul className="space-y-4">
           <li>
-            <a href="/admins/dashboard" onClick={() => navigate('/admins/dashboard')} className="flex items-center hover:text-yellow-300">
+            <a href="#dashboard" onClick={() => navigate('/admins/dashboard')} className="flex items-center hover:text-yellow-300">
               <FaTachometerAlt className="mr-2" /> Dashboard
             </a>
           </li>
           <li>
-            <a href="/admins/manage-users" onClick={() => navigate('/admins/manage-users')} className="flex items-center hover:text-yellow-300">
-              <FaUsers className="mr-2" /> Manage Users
-            </a>
-          </li>
-          <li>
-            <a href="/admins/manage-drivers" onClick={() => navigate('/admins/manage-drivers')} className="flex items-center hover:text-yellow-300">
-              <FaUserShield className="mr-2" /> Manage Drivers
-            </a>
-          </li>
-          <li>
-            <a href="/admins/all-requests" onClick={() => navigate('/admins/all-requests')} className="flex items-center hover:text-yellow-300">
+            <a href="#all-requests" onClick={() => navigate('/admins/all-requests')} className="flex items-center hover:text-yellow-300">
               <FaList className="mr-2" /> All Requests
             </a>
           </li>
           <li>
-            <a href="/admins/all-drivers" onClick={() => navigate('/admins/all-drivers')} className="flex items-center hover:text-yellow-300">
-              <FaUsersCog className="mr-2" /> All Drivers
+            <a href="#all-drivers" onClick={() => navigate('/admins/all-drivers')} className="flex items-center hover:text-yellow-300">
+              <FaUsers className="mr-2" /> All Drivers
             </a>
           </li>
           <li>
-            <a href="/admins/teams" onClick={() => navigate('/admins/teams')} className="flex items-center hover:text-yellow-300">
-              <FaUsersCog className="mr-2" /> Teams
+            <a href="#teams" onClick={() => navigate('/admins/teams')} className="flex items-center hover:text-yellow-300">
+              <FaUserShield className="mr-2" /> Teams
             </a>
           </li>
           <li>
-            <a href="/admins/payments" onClick={() => navigate('/admins/payments')} className="flex items-center hover:text-yellow-300">
+            <a href="#payments" onClick={() => navigate('/admins/payments')} className="flex items-center hover:text-yellow-300">
               <FaDollarSign className="mr-2" /> Payments
             </a>
           </li>
           <li>
-            <a href="/logout" onClick={() => navigate('/logout')} className="flex items-center hover:text-yellow-300">
-              <FaSignOutAlt className="mr-2" /> Logout
+            <a href="/logout" className="flex items-center hover:text-yellow-300">
+              <FaUserShield className="mr-2" /> Logout
             </a>
           </li>
         </ul>
@@ -101,9 +87,25 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-auto">
-        <div className="bg-white rounded-3xl p-8">
-          <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-          <p className="text-lg mb-6">Manage users, drivers, and system-wide requests.</p>
+        <div className="bg-white rounded-3xl p-6">
+          {/* Team Section */}
+          <section className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Team Overview</h2>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-blue-100 p-4 rounded-lg text-center">
+                <h3 className="text-lg font-semibold">Users</h3>
+                <p className="text-2xl">{teamStats.users}</p>
+              </div>
+              <div className="bg-green-100 p-4 rounded-lg text-center">
+                <h3 className="text-lg font-semibold">Admins</h3>
+                <p className="text-2xl">{teamStats.admins}</p>
+              </div>
+              <div className="bg-yellow-100 p-4 rounded-lg text-center">
+                <h3 className="text-lg font-semibold">Drivers</h3>
+                <p className="text-2xl">{teamStats.drivers}</p>
+              </div>
+            </div>
+          </section>
 
           {/* All Requests Section */}
           <section className="mb-8">
@@ -148,55 +150,9 @@ const AdminDashboard = () => {
             </div>
           </section>
 
-          {/* All Drivers Section */}
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">All Drivers</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="p-2">ID</th>
-                    <th className="p-2">Name</th>
-                    <th className="p-2">Status</th>
-                    <th className="p-2">Location</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {drivers.map(driver => (
-                    <tr key={driver.id} className="border-b">
-                      <td className="p-2">{driver.id}</td>
-                      <td className="p-2">{driver.name}</td>
-                      <td className="p-2">{driver.status}</td>
-                      <td className="p-2">{driver.location}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Teams Section */}
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">Teams</h2>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-blue-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Users</h3>
-                <p className="text-2xl">{teamStats.users}</p>
-              </div>
-              <div className="bg-green-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Admins</h3>
-                <p className="text-2xl">{teamStats.admins}</p>
-              </div>
-              <div className="bg-yellow-100 p-4 rounded-lg text-center">
-                <h3 className="text-lg font-semibold">Drivers</h3>
-                <p className="text-2xl">{teamStats.drivers}</p>
-              </div>
-            </div>
-          </section>
-
-          {/* Payments Section */}
+          {/* Payment Section */}
           <section>
-            <h2 className="text-2xl font-bold mb-4">Payments</h2>
+            <h2 className="text-2xl font-bold mb-4">Payment Checkup</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
@@ -234,4 +190,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default AdminPanel;
