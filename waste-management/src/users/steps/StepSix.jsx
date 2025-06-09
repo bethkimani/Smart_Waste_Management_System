@@ -18,6 +18,10 @@ const StepSix = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/users/waste-collection-process/step/5');
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
       <nav className="bg-green-900 p-4 flex justify-between mb-4">
@@ -85,9 +89,14 @@ const StepSix = () => {
             className="w-full p-2 mb-2 bg-gray-700 text-white rounded"
           />
         </div>
-        <button onClick={handlePayment} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!cardNumber || !expiryDate || !securityCode || !firstName || !lastName || !email || !phone}>
-          Complete Payment
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handlePayment} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!cardNumber || !expiryDate || !securityCode || !firstName || !lastName || !email || !phone}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );

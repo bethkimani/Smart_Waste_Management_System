@@ -6,7 +6,11 @@ const StepTwo = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (wasteTypes.length > 0) navigate('/waste-collection-process/step/3');
+    if (wasteTypes.length > 0) navigate('/users/waste-collection-process/step/3');
+  };
+
+  const handleBack = () => {
+    navigate('/users/waste-collection-process/step/1');
   };
 
   return (
@@ -42,9 +46,14 @@ const StepTwo = () => {
           ))}
         </div>
         <p className="text-gray-400 mb-4">Selected Waste Types: {wasteTypes.join(', ')}</p>
-        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={wasteTypes.length === 0}>
-          Continue
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={wasteTypes.length === 0}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );

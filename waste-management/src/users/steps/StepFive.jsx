@@ -7,7 +7,11 @@ const StepFive = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (deliveryDate) navigate('/waste-collection-process/step/6');
+    if (deliveryDate) navigate('/users/waste-collection-process/step/6');
+  };
+
+  const handleBack = () => {
+    navigate('/users/waste-collection-process/step/4');
   };
 
   return (
@@ -35,9 +39,14 @@ const StepFive = () => {
           min={new Date().toISOString().split('T')[0]}
         />
         <p>Collection Date: {collectionDate || 'TBD'}</p>
-        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4" disabled={!deliveryDate}>
-          Continue
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!deliveryDate}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );

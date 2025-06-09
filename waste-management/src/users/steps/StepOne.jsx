@@ -10,6 +10,10 @@ const StepOne = () => {
     if (postcode && address) navigate('/users/waste-collection-process/step/2');
   };
 
+  const handleBack = () => {
+    navigate('/users/dashboard');
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
       <nav className="bg-green-900 p-4 flex justify-between mb-4">
@@ -39,9 +43,14 @@ const StepOne = () => {
           <option value="">Select Address</option>
           <option value="195 Ashby Road, Hinckley LE10 1SH">195 Ashby Road, Hinckley LE10 1SH</option>
         </select>
-        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!postcode || !address}>
-          Continue
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!postcode || !address}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );

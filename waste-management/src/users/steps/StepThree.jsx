@@ -14,7 +14,11 @@ const StepThree = () => {
   ];
 
   const handleNext = () => {
-    if (selectedSkip) navigate('/waste-collection-process/step/4');
+    if (selectedSkip) navigate('/users/waste-collection-process/step/4');
+  };
+
+  const handleBack = () => {
+    navigate('/users/waste-collection-process/step/2');
   };
 
   return (
@@ -35,7 +39,6 @@ const StepThree = () => {
         <div className="grid grid-cols-3 gap-4">
           {skips.map(skip => (
             <div key={skip.size} className="bg-gray-700 p-4 rounded">
-              {/* Removed image due to potential network issue */}
               <h3 className="font-semibold">{skip.size} Yard Skip</h3>
               <p>{skip.hirePeriod} hire period</p>
               <p className="text-green-400">£{skip.price}</p>
@@ -48,9 +51,14 @@ const StepThree = () => {
             </div>
           ))}
         </div>
-        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4" disabled={!selectedSkip}>
-          Continue
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!selectedSkip}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -7,7 +7,11 @@ const StepFour = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (placement && (placement !== 'Public Road' || photo)) navigate('/waste-collection-process/step/5');
+    if (placement && (placement !== 'Public Road' || photo)) navigate('/users/waste-collection-process/step/5');
+  };
+
+  const handleBack = () => {
+    navigate('/users/waste-collection-process/step/3');
   };
 
   return (
@@ -43,9 +47,14 @@ const StepFour = () => {
             <input type="file" onChange={(e) => setPhoto(e.target.files[0])} className="bg-gray-700 p-2 rounded w-full" />
           </div>
         )}
-        <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!placement || (placement === 'Public Road' && !photo)}>
-          Continue
-        </button>
+        <div className="flex justify-between mt-4">
+          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            Back
+          </button>
+          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!placement || (placement === 'Public Road' && !photo)}>
+            Continue
+          </button>
+        </div>
       </div>
     </div>
   );
