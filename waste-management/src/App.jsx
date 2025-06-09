@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // Added React and useState import
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Hero from './components/Hero';
-import UserRoutes from './users/userRoutes';
-import AdminRoutes from './admins/adminRoutes';
-import DriverRoutes from './drivers/driverRoutes';
+import UserRoutes from './users/UserRoutes';
+import AdminRoutes from './admins/AdminRoutes';
+import DriverRoutes from './drivers/DriverRoutes';
 import ErrorBoundary from './ErrorBoundary';
 import Login from './users/Login';
 import Signup from './users/Signup';
