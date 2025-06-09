@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
-const Navbar = () => {
+const Navbar = ({ onRequestPickup }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const openAuthModal = () => {
-    console.log('Opening modal'); // Debug log
     setIsAuthModalOpen(true);
   };
 
+  const handleProceed = (role) => {
+    onRequestPickup(role);
+    setIsAuthModalOpen(false);
+  };
+
   const closeAuthModal = () => {
-    console.log('Closing modal'); // Debug log
     setIsAuthModalOpen(false);
   };
 
   return (
     <nav className="bg-green-700 text-white p-4 flex justify-between items-center sticky top-0 z-50 relative">
-      <div className="text-2xl font-bold">Waste.</div>
+      <div className="text-2xl font-bold">SmartTrash</div>
       <div className="space-x-6 hidden md:flex">
-        <Link to="/" className="hover:text-yellow-300">Home</Link>
+        <Link to="/hero" className="hover:text-yellow-300">Home</Link>
         <Link to="/about" className="hover:text-yellow-300">About Us</Link>
         <Link to="/services" className="hover:text-yellow-300">Services</Link>
         <Link to="/company" className="hover:text-yellow-300">Company</Link>
@@ -32,7 +35,11 @@ const Navbar = () => {
       >
         Request Pickup
       </button>
-      {isAuthModalOpen && <AuthModal onClose={closeAuthModal} />}
+      {isAuthModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
+          <AuthModal onProceed={handleProceed} onClose={closeAuthModal} />
+        </div>
+      )}
     </nav>
   );
 };
