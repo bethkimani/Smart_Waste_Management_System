@@ -6,9 +6,9 @@ const AuthModal = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Select Role</h2>
+        <h2 className="text-xl font-bold mb-4 text-black">Select Role</h2>
         <div className="mb-4">
-          <label className="mr-4">
+          <label className="mr-4 text-black">
             <input
               type="radio"
               value="user"
@@ -18,7 +18,7 @@ const AuthModal = ({ onClose }) => {
             />
             User
           </label>
-          <label>
+          <label className="text-black">
             <input
               type="radio"
               value="admin"
