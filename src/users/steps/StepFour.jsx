@@ -1,61 +1,38 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-const StepFour = () => {
-  const [placement, setPlacement] = useState('');
-  const [photo, setPhoto] = useState(null);
-  const navigate = useNavigate();
-
-  const handleNext = () => {
-    if (placement && (placement !== 'Public Road' || photo)) navigate('/users/raise-request/step/5');
-  };
-
-  const handleBack = () => {
-    navigate('/users/raise-request/step/3');
-  };
-
+const StepFour = ({ formData, onUpdate }) => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
-        <div className="flex space-x-4 text-white flex-wrap">
-          <span>Postcode</span>
-          <span>Waste Type</span>
-          <span>Choose Skip Size</span>
-          <span className="text-blue-400">Permit Check</span>
-          <span>Schedule Collection</span>
-          <span>Payment Information</span>
+    <div className="space-y-6">
+      <p className="text-lg text-gray-300">Where will the skip be placed? This helps us determine if you need a permit.</p>
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <div
+          onClick={() => onUpdate({ placement: 'Private Property', photo: null })}
+          className="bg-teal-800/50 p-4 rounded-lg border-2 border-transparent hover:border-teal-300 cursor-pointer transition"
+        >
+          <p className="text-white font-medium">Private Property</p>
+          <p className="text-gray-400">Driveway or private land</p>
+          <p className="text-gray-400">No permit required</p>
+          {formData.placement === 'Private Property' && <div className="mt-2 bg-purple-500 text-white text-center py-1 rounded">Selected</div>}
         </div>
-      </nav>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-green-400">Permit Check</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          <button
-            onClick={() => setPlacement('Private Property')}
-            className={`bg-gray-700 p-4 rounded ${placement === 'Private Property' ? 'border-2 border-blue-400' : ''}`}
-          >
-            Private Property<br />Driveway or private land<br />No permit required
-          </button>
-          <button
-            onClick={() => setPlacement('Public Road')}
-            className={`bg-gray-700 p-4 rounded ${placement === 'Public Road' ? 'border-2 border-blue-400' : ''}`}
-          >
-            Public Road<br />Council or public property<br />Permit required
-          </button>
-        </div>
-        {placement === 'Public Road' && (
-          <div className="mb-4">
-            <input type="file" onChange={(e) => setPhoto(e.target.files[0])} className="bg-gray-700 p-2 rounded w-full" />
-          </div>
-        )}
-        <div className="flex justify-between mt-4">
-          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-            Back
-          </button>
-          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!placement || (placement === 'Public Road' && !photo)}>
-            Continue
-          </button>
+        <div
+          onClick={() => onUpdate({ placement: 'Public Road' })}
+          className="bg-teal-800/50 p-4 rounded-lg border-2 border-transparent hover:border-teal-300 cursor-pointer transition"
+        >
+          <p className="text-white font-medium">Public Road</p>
+          <p className="text-gray-400">Council or public property</p>
+          <p className="text-gray-400">Permit required</p>
+          {formData.placement === 'Public Road' && <div className="mt-2 bg-purple-500 text-white text-center py-1 rounded">Selected</div>}
         </div>
       </div>
+      {formData.placement === 'Public Road' && (
+        <div className="bg-teal-800/50 p-4 rounded-lg">
+          <input
+            type="file"
+            onChange={(e) => onUpdate({ photo: e.target.files[0] })}
+            className="w-full p-2 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+          />
+        </div>
+      )}
     </div>
   );
 };

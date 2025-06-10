@@ -9,6 +9,8 @@ modal with User, Admin, or Driver login options.
 
 Select your role (User, Admin, Driver) and enter your email/username and password.
 
+
+
 AI-powered verification (Gemini) validates credentials and ensures secure login.
 
 Upon successful login, redirect to the respective dashboard: 

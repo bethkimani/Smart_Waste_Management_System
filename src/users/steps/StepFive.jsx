@@ -1,53 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
-const StepFive = () => {
-  const [deliveryDate, setDeliveryDate] = useState('');
-  const [collectionDate, setCollectionDate] = useState('');
-  const navigate = useNavigate();
-
-  const handleNext = () => {
-    if (deliveryDate) navigate('/users/raise-request/step/6');
-  };
-
-  const handleBack = () => {
-    navigate('/users/raise-request/step/4');
-  };
-
+const StepFive = ({ formData, onUpdate }) => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
-        <div className="flex space-x-4 text-white flex-wrap">
-          <span>Postcode</span>
-          <span>Waste Type</span>
-          <span>Choose Skip Size</span>
-          <span>Permit Check</span>
-          <span className="text-blue-400">Schedule Collection</span>
-          <span>Payment Information</span>
-        </div>
-      </nav>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-green-400">Schedule Collection</h2>
+    <div className="space-y-6">
+      <p className="text-lg text-gray-300">Select your preferred skip delivery date. We'll aim to deliver between 7am and 6pm.</p>
+      <div className="bg-teal-800/50 p-4 rounded-lg">
         <input
           type="date"
-          value={deliveryDate}
+          value={formData.deliveryDate}
           onChange={(e) => {
-            setDeliveryDate(e.target.value);
-            setCollectionDate(new Date(new Date(e.target.value).setDate(new Date(e.target.value).getDate() + 14)).toISOString().split('T')[0]);
+            const delivery = e.target.value;
+            const collection = new Date(new Date(delivery).setDate(new Date(delivery).getDate() + 14)).toISOString().split('T')[0];
+            onUpdate({ deliveryDate: delivery, collectionDate: collection });
           }}
-          className="w-full p-2 mb-4 bg-gray-700 text-white rounded"
+          className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
           min={new Date().toISOString().split('T')[0]}
         />
-        <p>Collection Date: {collectionDate || 'TBD'}</p>
-        <div className="flex justify-between mt-4">
-          <button onClick={handleBack} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-            Back
-          </button>
-          <button onClick={handleNext} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" disabled={!deliveryDate}>
-            Continue
-          </button>
-        </div>
       </div>
+      <p className="text-gray-400">Collection Date: {formData.collectionDate || 'TBD'}</p>
     </div>
   );
 };
