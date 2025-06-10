@@ -7,7 +7,7 @@ const StepOne = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (postcode && address) navigate('/users/waste-collection-process/step/2');
+    if (postcode && address) navigate('/users/raise-request/step/2');
   };
 
   const handleBack = () => {
@@ -15,9 +15,9 @@ const StepOne = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4">
-        <div className="flex space-x-4 text-white">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
+      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+        <div className="flex space-x-4 text-white flex-wrap">
           <span className="text-blue-400">Postcode</span>
           <span>Waste Type</span>
           <span>Choose Skip Size</span>

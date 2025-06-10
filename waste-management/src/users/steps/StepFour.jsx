@@ -7,17 +7,17 @@ const StepFour = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (placement && (placement !== 'Public Road' || photo)) navigate('/users/waste-collection-process/step/5');
+    if (placement && (placement !== 'Public Road' || photo)) navigate('/users/raise-request/step/5');
   };
 
   const handleBack = () => {
-    navigate('/users/waste-collection-process/step/3');
+    navigate('/users/raise-request/step/3');
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4">
-        <div className="flex space-x-4 text-white">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
+      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+        <div className="flex space-x-4 text-white flex-wrap">
           <span>Postcode</span>
           <span>Waste Type</span>
           <span>Choose Skip Size</span>
@@ -28,7 +28,7 @@ const StepFour = () => {
       </nav>
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-green-400">Permit Check</h2>
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <button
             onClick={() => setPlacement('Private Property')}
             className={`bg-gray-700 p-4 rounded ${placement === 'Private Property' ? 'border-2 border-blue-400' : ''}`}

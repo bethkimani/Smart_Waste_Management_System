@@ -10,6 +10,7 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -26,6 +27,9 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
     ],
     wasteComposition: { plastic: 18, paper: 19, metal: 10, glass: 6, food: 22, wood: 10, others: 15 },
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,11 +72,26 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
     plugins: { legend: { position: 'top' }, title: { display: true, text: 'Waste Composition' } },
   };
 
+  const handleRequestPickup = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleUserSelect = () => {
+    if (selectedUser) {
+      navigate('/users/login');
+    }
+  };
+
   return (
-    <main className="flex-1 p-8 overflow-auto">
+    <main className="flex-1 p-4 sm:p-8 overflow-auto">
       <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
-        <h1 className="text-3xl font-bold mb-4 text-green-400">Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-green-400">Dashboard</h1>
+          <button onClick={handleRequestPickup} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Request Pickup
+          </button>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-gray-700 p-4 rounded-lg">
             <h3 className="text-lg font-semibold">Total Pickups in June</h3>
             <p className="text-2xl">{wasteData.totalPickups} Tons</p>
@@ -85,12 +104,12 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
             <h3 className="text-lg font-semibold">Surplus</h3>
             <p className="text-2xl">${wasteData.surplusValue}Mn</p>
           </div>
-          <div className="bg-gray-700 p-4 rounded-lg col-span-2">
+          <div className="bg-gray-700 p-4 rounded-lg col-span-1 sm:col-span-2">
             <Bar data={barData} options={barOptions} />
           </div>
           <div className="bg-gray-700 p-4 rounded-lg col-span-1">
             <h3 className="text-lg font-semibold">Market Place Requirements</h3>
-            <table className="w-full">
+            <table className="w-full text-sm">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -111,11 +130,44 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
               </tbody>
             </table>
           </div>
-          <div className="bg-gray-700 p-4 rounded-lg col-span-2">
+          <div className="bg-gray-700 p-4 rounded-lg col-span-1 sm:col-span-2">
             <Pie data={pieData} options={pieOptions} />
           </div>
         </div>
       </div>
+
+      {/* User Selection Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-4 text-green-400">Select User</h2>
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+              className="w-full p-2 mb-4 bg-gray-700 text-white rounded"
+            >
+              <option value="">Select a user</option>
+              <option value="user1">User 1</option>
+              <option value="user2">User 2</option>
+            </select>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUserSelect}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                disabled={!selectedUser}
+              >
+                Proceed to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 };

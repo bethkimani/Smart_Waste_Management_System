@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPaypal, FaGooglePay, FaCcVisa } from 'react-icons/fa'; // Example icons, install react-icons if needed
+import { FaPaypal, FaGooglePay, FaCcVisa } from 'react-icons/fa';
+import jsPDF from 'jspdf';
 
 const StepSix = () => {
   const navigate = useNavigate();
-
-  // Initial state based on StepFive data
   const [orderSummary] = useState({
     address: '195 Ashby Road, Hinckley LE10 1SH',
     deliveryDate: '2025-06-20',
@@ -16,7 +15,6 @@ const StepSix = () => {
     vat: 48.20,
     total: 289.20,
   });
-
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -39,16 +37,39 @@ const StepSix = () => {
     }
   };
 
+  const generateReceipt = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(18);
+    doc.text('SmartTrash Receipt', 20, 20);
+    doc.setFontSize(12);
+    doc.text(`Order ID: ORD-${Math.floor(Math.random() * 100000)}`, 20, 40);
+    doc.text(`Customer: ${firstName} ${lastName}`, 20, 50);
+    doc.text(`Email: ${email}`, 20, 60);
+    doc.text(`Phone: ${phone}`, 20, 70);
+    doc.text(`Address: ${orderSummary.address}`, 20, 80);
+    doc.text(`Delivery Date: ${new Date(orderSummary.deliveryDate).toLocaleDateString('en-GB')}`, 20, 90);
+    doc.text(`Collection Date: ${new Date(orderSummary.collectionDate).toLocaleDateString('en-GB')}`, 20, 100);
+    doc.text(`Skip Size: ${orderSummary.skipSize} Yard`, 20, 110);
+    doc.text(`Hire Period: ${orderSummary.hirePeriod}`, 20, 120);
+    doc.text(`Subtotal: £${orderSummary.price.toFixed(2)}`, 20, 130);
+    doc.text(`VAT (20%): £${orderSummary.vat.toFixed(2)}`, 20, 140);
+    doc.text(`Total: £${orderSummary.total.toFixed(2)}`, 20, 150);
+    doc.text(`Payment Method: ${paymentMethod.charAt(0).toUpperCase() + paymentMethod.slice(1)}`, 20, 160);
+    doc.text(`Date: ${new Date().toLocaleDateString('en-GB')}`, 20, 170);
+    doc.save(`SmartTrash_Receipt_${Date.now()}.pdf`);
+  };
+
   const handleConfirmAccount = () => {
     if (firstName && lastName && email && confirmEmail && phone && email === confirmEmail) {
       alert(`Confirmation email sent to ${email}! Account created. Payment processed via ${paymentMethod}.`);
+      generateReceipt();
       navigate('/users/dashboard');
     }
     setIsConfirmModalOpen(false);
   };
 
   const handleBack = () => {
-    navigate('/users/waste-collection-process/step/5');
+    navigate('/users/raise-request/step/5');
   };
 
   const openPaymentModal = () => setIsPaymentModalOpen(true);
@@ -56,9 +77,9 @@ const StepSix = () => {
   const closeConfirmModal = () => setIsConfirmModalOpen(false);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4">
-        <div className="flex space-x-4 text-white">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
+      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+        <div className="flex space-x-4 text-white flex-wrap">
           <span>Postcode</span>
           <span>Waste Type</span>
           <span>Choose Skip Size</span>
@@ -67,9 +88,9 @@ const StepSix = () => {
           <span className="text-blue-400">Payment Information</span>
         </div>
       </nav>
-      <div className="flex space-x-6">
+      <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-6">
         {/* Order Summary */}
-        <div className="w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="w-full sm:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4 text-green-400">Order Summary</h2>
           <div className="mb-4">
             <h3 className="text-lg font-semibold">Delivery Address</h3>
@@ -93,7 +114,7 @@ const StepSix = () => {
         </div>
 
         {/* Payment Section */}
-        <div className="w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="w-full sm:w-1/2 bg-gray-800 p-6 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4 text-green-400">Payment Details</h2>
           <div className="mb-4">
             <button
@@ -189,7 +210,7 @@ const StepSix = () => {
       {/* Payment Confirmation Modal */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-1/3">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold mb-4 text-green-400">Create Account</h2>
             <p className="mb-4">To help you track your order and manage your skip hire, we'll create an account for you.</p>
             <div className="mb-4">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const Rewards = () => {
-  const [rewardPoints, setRewardPoints] = useState(66); // Initial points
+  const [rewardPoints, setRewardPoints] = useState(66);
 
   const handleRedeem = () => {
     if (rewardPoints < 10) return alert('Not enough points to redeem!');
@@ -10,7 +10,7 @@ const Rewards = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
       <h2 className="text-2xl font-bold mb-4 text-green-400">Rewards</h2>
       <div className="bg-white text-black p-6 rounded-lg shadow-lg">
         <div className="mb-4">
@@ -26,7 +26,9 @@ const Rewards = () => {
         <div>
           <h3>Available Rewards</h3>
           <p>Your Points: {rewardPoints} points</p>
-          <button onClick={handleRedeem} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2">Redeem All Points</button>
+          <button onClick={handleRedeem} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2">
+            Redeem All Points
+          </button>
           <p className="mt-2">Default Reward: 10 points</p>
         </div>
       </div>

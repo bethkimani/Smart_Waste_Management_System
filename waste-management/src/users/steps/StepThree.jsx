@@ -14,17 +14,17 @@ const StepThree = () => {
   ];
 
   const handleNext = () => {
-    if (selectedSkip) navigate('/users/waste-collection-process/step/4');
+    if (selectedSkip) navigate('/users/raise-request/step/4');
   };
 
   const handleBack = () => {
-    navigate('/users/waste-collection-process/step/2');
+    navigate('/users/raise-request/step/2');
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4">
-        <div className="flex space-x-4 text-white">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
+      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+        <div className="flex space-x-4 text-white flex-wrap">
           <span>Postcode</span>
           <span>Waste Type</span>
           <span className="text-blue-400">Choose Skip Size</span>
@@ -36,7 +36,7 @@ const StepThree = () => {
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-green-400">Choose Your Skip Size</h2>
         <p className="mb-4">Select the skip size that best suits your needs.</p>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {skips.map(skip => (
             <div key={skip.size} className="bg-gray-700 p-4 rounded">
               <h3 className="font-semibold">{skip.size} Yard Skip</h3>

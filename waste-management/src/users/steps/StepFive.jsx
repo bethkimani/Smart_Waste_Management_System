@@ -7,17 +7,17 @@ const StepFive = () => {
   const navigate = useNavigate();
 
   const handleNext = () => {
-    if (deliveryDate) navigate('/users/waste-collection-process/step/6');
+    if (deliveryDate) navigate('/users/raise-request/step/6');
   };
 
   const handleBack = () => {
-    navigate('/users/waste-collection-process/step/4');
+    navigate('/users/raise-request/step/4');
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <nav className="bg-green-900 p-4 flex justify-between mb-4">
-        <div className="flex space-x-4 text-white">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
+      <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+        <div className="flex space-x-4 text-white flex-wrap">
           <span>Postcode</span>
           <span>Waste Type</span>
           <span>Choose Skip Size</span>

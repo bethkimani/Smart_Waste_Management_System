@@ -37,8 +37,9 @@ const AppContent = () => {
   };
 
   const handleLogout = () => {
-    setLoggedInRole(null);
-    navigate('/hero');
+    setLoggedInRole(null); // Reset the role
+    setIsRequestModalOpen(false); // Close any open modals
+    navigate('/hero'); // Navigate to hero page
   };
 
   const handleLoginSuccess = (role) => {
@@ -59,27 +60,26 @@ const AppContent = () => {
               <Routes>
                 <Route path="/" element={<Navigate to="/hero" />} />
                 <Route path="/hero" element={<Hero />} />
+                <Route path="/users/login" element={<Login onLoginSuccess={() => handleLoginSuccess('user')} />} />
+                <Route path="/users/signup" element={<Signup onLoginSuccess={() => handleLoginSuccess('user')} />} />
+                <Route path="/admins/login" element={<AdminLogin onLoginSuccess={() => handleLoginSuccess('admin')} />} />
+                <Route path="/admins/signup" element={<AdminSignup onLoginSuccess={() => handleLoginSuccess('admin')} />} />
+                <Route path="/drivers/login" element={<DriverLogin onLoginSuccess={() => handleLoginSuccess('driver')} />} />
+                <Route path="/drivers/signup" element={<DriverSignup onLoginSuccess={() => handleLoginSuccess('driver')} />} />
               </Routes>
             </ErrorBoundary>
           </main>
           <Footer />
         </>
       )}
-      <Routes>
-        <Route path="/users/login" element={<Login onLoginSuccess={() => handleLoginSuccess('user')} />} />
-        <Route path="/users/signup" element={<Signup onLoginSuccess={() => handleLoginSuccess('user')} />} />
-        <Route path="/admins/login" element={<AdminLogin onLoginSuccess={() => handleLoginSuccess('admin')} />} />
-        <Route path="/admins/signup" element={<AdminSignup onLoginSuccess={() => handleLoginSuccess('admin')} />} />
-        <Route path="/drivers/login" element={<DriverLogin onLoginSuccess={() => handleLoginSuccess('driver')} />} />
-        <Route path="/drivers/signup" element={<DriverSignup onLoginSuccess={() => handleLoginSuccess('driver')} />} />
-        {loggedInRole && (
-          <>
-            <Route path="/users/*" element={<UserRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
-            <Route path="/admins/*" element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
-            <Route path="/drivers/*" element={<DriverRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
-          </>
-        )}
-      </Routes>
+      {loggedInRole && (
+        <Routes>
+          <Route path="/users/*" element={<UserRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
+          <Route path="/admins/*" element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
+          <Route path="/drivers/*" element={<DriverRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
+          <Route path="*" element={<Navigate to={`/${loggedInRole}s/dashboard`} />} />
+        </Routes>
+      )}
       {loggedInRole && isRequestModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
           <RequestPickupModal onClose={() => setIsRequestModalOpen(false)} />

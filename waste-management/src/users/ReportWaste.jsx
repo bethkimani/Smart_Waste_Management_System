@@ -17,12 +17,14 @@ const ReportWaste = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="min-h-screen bg-gray-900 text-white p-4 sm:p-6">
       <h2 className="text-2xl font-bold mb-4 text-green-400">Report Waste</h2>
       <div className="bg-white text-black p-6 rounded-lg shadow-lg">
         <div className="border-dashed border-2 border-green-300 p-4 mb-4">
-          <input type="file" onChange={(e) => setReportPhoto(e.target.files[0])} className="mb-2" />
-          <button onClick={handleReportWaste} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Verify Waste</button>
+          <input type="file" onChange={(e) => setReportPhoto(e.target.files[0])} className="mb-2 w-full" />
+          <button onClick={handleReportWaste} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            Verify Waste
+          </button>
         </div>
         {verifiedWaste && (
           <div className="bg-green-100 p-4 rounded mb-4">

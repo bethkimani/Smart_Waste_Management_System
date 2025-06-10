@@ -7,7 +7,7 @@ import StepFour from './steps/StepFour';
 import StepFive from './steps/StepFive';
 import StepSix from './steps/StepSix';
 
-const WasteCollectionProcess = () => {
+const RaiseRequest = () => {
   const { step } = useParams();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(parseInt(step) || 1);
@@ -29,30 +29,30 @@ const WasteCollectionProcess = () => {
 
   const handleNext = () => {
     if (currentStep < steps.length) {
-      navigate(`/users/waste-collection-process/step/${currentStep + 1}`);
+      navigate(`/users/raise-request/step/${currentStep + 1}`);
     }
   };
 
   const handleBack = () => {
     if (currentStep > 1) {
-      navigate(`/users/waste-collection-process/step/${currentStep - 1}`);
+      navigate(`/users/raise-request/step/${currentStep - 1}`);
     }
   };
 
   const handleComplete = () => {
-    alert('Waste collection process completed! Redirecting to Dashboard.');
+    alert('Waste collection request completed! Redirecting to Dashboard.');
     navigate('/users/dashboard');
   };
 
   return (
-    <div className="flex-1 p-8 overflow-auto">
+    <div className="flex-1 p-4 sm:p-8 overflow-auto">
       <div className="bg-gray-800 rounded-xl p-6 shadow-lg">
         {currentStep === 0 || !steps[currentStep - 1] ? (
           <div>Please start the process from the sidebar or ensure a valid step is selected.</div>
         ) : (
           <>
-            <nav className="bg-green-900 p-4 flex justify-between mb-4">
-              <div className="flex space-x-4 text-white">
+            <nav className="bg-green-900 p-4 flex justify-between mb-4 flex-wrap">
+              <div className="flex space-x-4 text-white flex-wrap">
                 <span className={currentStep === 1 ? 'text-blue-400' : ''}>Postcode</span>
                 <span className={currentStep === 2 ? 'text-blue-400' : ''}>Waste Type</span>
                 <span className={currentStep === 3 ? 'text-blue-400' : ''}>Choose Skip Size</span>
@@ -94,4 +94,4 @@ const WasteCollectionProcess = () => {
   );
 };
 
-export default WasteCollectionProcess;
+export default RaiseRequest;
