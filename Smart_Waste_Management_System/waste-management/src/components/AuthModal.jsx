@@ -1,20 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ onProceed, onClose }) => {
   const [role, setRole] = useState('user');
-  const [isOpen, setIsOpen] = useState(true);
 
   const handleProceedClick = () => {
-    onProceed(role);
-    setIsOpen(false);
+    localStorage.setItem('selectedRole', role); // Store selected role
+    if (onProceed) onProceed(role); // Pass role to parent
+    onClose(); // Close modal
   };
-
-  const handleClose = () => {
-    setIsOpen(false);
-    if (onClose) onClose();
-  };
-
-  if (!isOpen) return null;
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -53,7 +47,7 @@ const AuthModal = ({ onProceed, onClose }) => {
       </div>
       <div className="flex justify-end">
         <button
-          onClick={handleClose}
+          onClick={onClose}
           className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
         >
           Cancel

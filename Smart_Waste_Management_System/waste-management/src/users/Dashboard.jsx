@@ -1,3 +1,4 @@
+// src/users/Dashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 import {
@@ -14,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
+const Dashboard = ({ onLogout, onRequestPickup }) => {
   const [wasteData, setWasteData] = useState({
     totalPickups: 54.56,
     exportedValue: 24.4,
@@ -76,9 +77,10 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
     setIsModalOpen(true);
   };
 
-  const handleUserSelect = () => {
-    if (selectedUser) {
-      navigate('/users/login');
+  const handleUserSelect = (role) => {
+    if (selectedUser && onRequestPickup) {
+      onRequestPickup(role); // Pass role to parent
+      setIsModalOpen(false);
     }
   };
 
@@ -158,7 +160,7 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
                 Cancel
               </button>
               <button
-                onClick={handleUserSelect}
+                onClick={() => handleUserSelect('user')}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 disabled={!selectedUser}
               >
@@ -173,7 +175,6 @@ const Dashboard = ({ loggedInRole, onLogout, onRequestPickup }) => {
 };
 
 Dashboard.defaultProps = {
-  loggedInRole: null,
   onLogout: () => {},
   onRequestPickup: () => {},
 };

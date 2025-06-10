@@ -20,6 +20,13 @@ const DriverLayout = () => {
 };
 
 const DriverRoutes = () => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const loggedInRole = localStorage.getItem('loggedInRole');
+
+  if (!isAuthenticated || loggedInRole !== 'driver') {
+    return <Navigate to="/drivers/login" />;
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Routes>
@@ -30,6 +37,7 @@ const DriverRoutes = () => {
           <Route path="/route-review" element={<ErrorBoundary><RouteReview /></ErrorBoundary>} />
           <Route path="/collect-waste" element={<ErrorBoundary><CollectWaste /></ErrorBoundary>} />
           <Route path="/trip-history" element={<ErrorBoundary><TripHistory /></ErrorBoundary>} />
+          <Route path="*" element={<Navigate to="/drivers/dashboard" />} />
         </Route>
       </Routes>
     </div>

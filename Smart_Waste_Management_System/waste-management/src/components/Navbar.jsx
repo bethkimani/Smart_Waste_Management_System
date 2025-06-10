@@ -10,7 +10,7 @@ const Navbar = ({ onRequestPickup }) => {
   };
 
   const handleProceed = (role) => {
-    onRequestPickup(role);
+    onRequestPickup(role); // Pass the selected role to App.jsx
     setIsAuthModalOpen(false);
   };
 

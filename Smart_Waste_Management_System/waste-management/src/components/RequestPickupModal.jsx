@@ -9,7 +9,6 @@ const RequestPickupModal = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate sending request (replace with API call)
     console.log('Pickup Request Submitted:', pickupDetails);
     alert('Pickup request submitted successfully!');
     onClose();
