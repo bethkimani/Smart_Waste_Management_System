@@ -2,7 +2,7 @@ import React from 'react';
 
 const StepFive = ({ formData, onUpdate }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <p className="text-lg text-gray-300">Select your preferred skip delivery date. We'll aim to deliver between 7am and 6pm.</p>
       <div className="bg-teal-800/50 p-4 rounded-lg">
         <input

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 const StepOne = ({ formData, onUpdate }) => {
@@ -30,7 +29,7 @@ const StepOne = ({ formData, onUpdate }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="bg-teal-800/50 p-4 rounded-lg">
         <select
           value={formData.postcode || ''}

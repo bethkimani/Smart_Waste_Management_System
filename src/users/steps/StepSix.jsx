@@ -57,7 +57,7 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
 
   return (
     <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-6">
-      <div className="w-full sm:w-1/2 bg-teal-800/50 p-6 rounded-lg">
+      <div className="w-full sm:w-1/2 bg-teal-800/50 p-4 sm:p-6 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-teal-300">Order Summary</h3>
         <p className="mb-2">Delivery Address: {orderSummary.address}</p>
         <p className="mb-2">Delivery: {new Date(orderSummary.deliveryDate).toLocaleDateString('en-GB')}</p>
@@ -67,9 +67,9 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
         <p className="mb-2">VAT (20%): £{orderSummary.vat.toFixed(2)}</p>
         <p className="font-bold">Total: £{orderSummary.total.toFixed(2)}</p>
       </div>
-      <div className="w-full sm:w-1/2 bg-teal-800/50 p-6 rounded-lg">
+      <div className="w-full sm:w-1/2 bg-teal-800/50 p-4 sm:p-6 rounded-lg">
         <h3 className="text-xl font-semibold mb-4 text-teal-300">Payment Details</h3>
-        <div className="flex space-x-2 mb-4">
+        <div className="flex space-x-2 mb-4 flex-wrap">
           <button
             onClick={() => onUpdate({ paymentMethod: 'card' })}
             className={`flex-1 p-3 rounded-l ${formData.paymentMethod === 'card' ? 'bg-purple-500' : 'bg-white/10'} text-white`}
@@ -98,20 +98,20 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
               placeholder="Card Number"
               className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
             />
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 flex-col sm:flex-row">
               <input
                 type="text"
                 value={formData.expiryDate}
                 onChange={(e) => onUpdate({ expiryDate: e.target.value })}
                 placeholder="MM/YY"
-                className="w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
               />
               <input
                 type="text"
                 value={formData.securityCode}
                 onChange={(e) => onUpdate({ securityCode: e.target.value })}
                 placeholder="CVC"
-                className="w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
               />
             </div>
             <select
@@ -152,24 +152,24 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
       </div>
       {isConfirmModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-teal-800/50 p-6 rounded-lg shadow-lg w-full max-w-md">
+          <div className="bg-teal-800/50 p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 className="text-2xl font-bold mb-4 text-teal-300">Create Account</h2>
             <p className="mb-4 text-gray-300">To track your order, we'll create an account for you.</p>
             <div className="space-y-4">
-              <div className="flex space-x-2">
+              <div className="flex space-x-2 flex-col sm:flex-row">
                 <input
                   type="text"
                   value={formData.firstName}
                   onChange={(e) => onUpdate({ firstName: e.target.value })}
                   placeholder="First Name"
-                  className="w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                  className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
                 />
                 <input
                   type="text"
                   value={formData.lastName}
                   onChange={(e) => onUpdate({ lastName: e.target.value })}
                   placeholder="Last Name"
-                  className="w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                  className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
                 />
               </div>
               <input
@@ -194,16 +194,16 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
                 className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
               />
             </div>
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-between mt-4 flex-col sm:flex-row space-y-4 sm:space-y-0">
               <button
                 onClick={() => setIsConfirmModalOpen(false)}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition"
+                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition w-full sm:w-auto"
               >
                 Back
               </button>
               <button
                 onClick={handleConfirmAccount}
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition disabled:opacity-50"
+                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition disabled:opacity-50 w-full sm:w-auto"
                 disabled={!formData.firstName || !formData.lastName || !formData.email || !formData.confirmEmail || !formData.phone || formData.email !== formData.confirmEmail}
               >
                 Confirm

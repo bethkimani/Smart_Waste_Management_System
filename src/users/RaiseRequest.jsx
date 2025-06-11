@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import StepOne from './steps/StepOne';
@@ -98,9 +97,9 @@ const RaiseRequest = () => {
   };
 
   return (
-    <div className="flex-1 p-4 sm:p-8 overflow-auto bg-gradient-to-br from-purple-900 to-teal-900 text-white min-h-screen">
+    <div className="flex-1 p-4 sm:p-8 overflow-auto bg-gradient-to-br from-purple-900 to-teal-900 text-white min-h-screen ml-16"> {/* Reduced from ml-64 to ml-16 */}
       <nav className="bg-teal-800 p-4 rounded-lg mb-6 flex justify-center">
-        <div className="flex space-x-6 text-lg font-medium">
+        <div className="flex space-x-6 text-lg font-medium flex-wrap">
           {steps.map((step, index) => (
             <span
               key={index}
@@ -112,17 +111,17 @@ const RaiseRequest = () => {
           ))}
         </div>
       </nav>
-      <div className="bg-white/10 backdrop-blur-md p-6 rounded-xl shadow-lg">
+      <div className="bg-white/10 backdrop-blur-md p-4 sm:p-6 rounded-xl shadow-lg">
         {currentStep === 0 || !steps[currentStep - 1] ? (
           <div>Please start the process from the sidebar or ensure a valid step is selected.</div>
         ) : (
           <>
             <h2 className="text-3xl font-bold mb-6 text-teal-300">{steps[currentStep - 1].name}</h2>
             <div className="mb-8">{steps[currentStep - 1].component}</div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center flex-col sm:flex-row space-y-4 sm:space-y-0">
               <button
                 onClick={handleBack}
-                className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition disabled:opacity-50"
+                className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-500 transition disabled:opacity-50 w-full sm:w-auto"
                 disabled={currentStep === 1 && !formData.postcode && !formData.address}
               >
                 Back
@@ -130,7 +129,7 @@ const RaiseRequest = () => {
               {currentStep === steps.length ? (
                 <button
                   onClick={handleComplete}
-                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition disabled:opacity-50"
+                  className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition disabled:opacity-50 w-full sm:w-auto"
                   disabled={!isStepValid()}
                 >
                   Complete
@@ -138,7 +137,7 @@ const RaiseRequest = () => {
               ) : (
                 <button
                   onClick={handleNext}
-                  className="bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-400 transition disabled:opacity-50"
+                  className="bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-400 transition disabled:opacity-50 w-full sm:w-auto"
                   disabled={!isStepValid()}
                 >
                   Continue

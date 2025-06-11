@@ -11,7 +11,7 @@ const StepThree = ({ formData, onUpdate }) => {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <p className="text-lg text-gray-300">Select the skip size that best suits your needs.</p>
       <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide">
         {skips.map(skip => (

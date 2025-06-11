@@ -29,7 +29,7 @@ const UserRoutes = ({ onLogout }) => {
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <Sidebar onLogout={onLogout} />
-      <div className="flex-1 p-1 sm:p-4 ml-0 sm:ml-64 overflow-hidden h-full">
+      <div className="flex-1 p-1 sm:p-4 ml-16 overflow-hidden h-full"> {/* Reduced from ml-64 to ml-16 */}
         <Routes>
           <Route path="/dashboard" element={<Dashboard onLogout={onLogout} onRequestPickup={handleRequestPickup} />} />
           <Route path="/raise-request/*" element={<RaiseRequest />} />

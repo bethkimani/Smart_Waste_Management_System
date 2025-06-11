@@ -2,7 +2,7 @@ import React from 'react';
 
 const StepFour = ({ formData, onUpdate }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <p className="text-lg text-gray-300">Where will the skip be placed? This helps us determine if you need a permit.</p>
       <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <div
