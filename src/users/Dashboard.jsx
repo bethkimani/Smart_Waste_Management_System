@@ -58,10 +58,10 @@ const Dashboard = ({ onLogout, onRequestPickup }) => {
 
   const barOptions = {
     responsive: true,
-    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Scheduled vs Pickups' } },
-    scales: { y: { beginAtZero: true } },
+    plugins: { legend: { position: 'top', labels: { font: { size: 8 } } }, title: { display: true, text: 'Scheduled vs Pickups', font: { size: 10 } } },
+    scales: { y: { beginAtZero: true, ticks: { font: { size: 8 } } } },
     maintainAspectRatio: false,
-    height: 200, // Reduced height to fit within viewport
+    height: 100,
   };
 
   const pieData = {
@@ -71,9 +71,9 @@ const Dashboard = ({ onLogout, onRequestPickup }) => {
 
   const pieOptions = {
     responsive: true,
-    plugins: { legend: { position: 'top' }, title: { display: true, text: 'Waste Composition' } },
+    plugins: { legend: { position: 'top', labels: { font: { size: 8 } } }, title: { display: true, text: 'Waste Composition', font: { size: 10 } } },
     maintainAspectRatio: false,
-    height: 200, // Reduced height to fit within viewport
+    height: 100,
   };
 
   const handleRequestPickup = () => {
@@ -88,79 +88,79 @@ const Dashboard = ({ onLogout, onRequestPickup }) => {
   };
 
   return (
-    <main className="ml-64 p-4 sm:p-8 bg-gray-900 text-white" style={{ maxHeight: 'calc(100vh - 2rem)', overflow: 'hidden' }}>
-      <div className="bg-gray-800 rounded-xl p-4 shadow-lg" style={{ maxHeight: 'calc(100vh - 2rem)', overflowY: 'auto' }}>
-        <h1 className="text-3xl font-bold text-green-400 mb-4">Smart Waste Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-700 p-2 rounded-lg text-center">
-            <h3 className="text-sm font-semibold text-gray-300">Total Pickups in June</h3>
-            <p className="text-xl font-bold">{wasteData.totalPickups} Tons</p>
+    <main className="p-1 sm:p-2 sm:ml-64 bg-gray-900 text-white flex-1 overflow-hidden h-full">
+      <div className="bg-gray-800 rounded-xl p-1 sm:p-2 shadow-lg h-full overflow-hidden">
+        <h1 className="text-lg sm:text-2xl font-bold text-green-400 mb-1 sm:mb-2">Smart Waste Dashboard</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-2 mb-1 sm:mb-2">
+          <div className="bg-gray-700 p-1 sm:p-2 rounded-lg text-center">
+            <h3 className="text-xs sm:text-base font-semibold text-gray-300">Total Pickups in June</h3>
+            <p className="text-sm sm:text-xl font-bold">{wasteData.totalPickups} Tons</p>
           </div>
-          <div className="bg-gray-700 p-2 rounded-lg text-center">
-            <h3 className="text-sm font-semibold text-gray-300">Exported Value</h3>
-            <p className="text-xl font-bold">${wasteData.exportedValue}Mn</p>
+          <div className="bg-gray-700 p-1 sm:p-2 rounded-lg text-center">
+            <h3 className="text-xs sm:text-base font-semibold text-gray-300">Exported Value</h3>
+            <p className="text-sm sm:text-xl font-bold">${wasteData.exportedValue}Mn</p>
           </div>
-          <div className="bg-gray-700 p-2 rounded-lg text-center">
-            <h3 className="text-sm font-semibold text-gray-300">Surplus Value</h3>
-            <p className="text-xl font-bold">${wasteData.surplusValue}Mn</p>
+          <div className="bg-gray-700 p-1 sm:p-2 rounded-lg text-center">
+            <h3 className="text-xs sm:text-base font-semibold text-gray-300">Surplus Value</h3>
+            <p className="text-sm sm:text-xl font-bold">${wasteData.surplusValue}Mn</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-          <div className="bg-gray-700 p-2 rounded-lg h-48">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-1 sm:gap-2 mb-1 sm:mb-2">
+          <div className="bg-gray-700 p-1 sm:p-2 rounded-lg h-20 sm:h-32">
             <Bar data={barData} options={barOptions} />
           </div>
-          <div className="bg-gray-700 p-2 rounded-lg">
-            <h3 className="text-sm font-semibold text-gray-300 mb-1">Market Place Requirements</h3>
-            <table className="w-full text-xs">
+          <div className="bg-gray-700 p-1 sm:p-2 rounded-lg">
+            <h3 className="text-xs sm:text-base font-semibold text-gray-300 mb-1 sm:mb-1">Market Place Requirements</h3>
+            <table className="w-full text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-gray-600">
-                  <th className="pb-1 text-left">Name</th>
-                  <th className="pb-1 text-left">Material</th>
-                  <th className="pb-1 text-left">Location</th>
-                  <th className="pb-1 text-left">Weight</th>
+                  <th className="pb-1 sm:pb-1 text-left">Name</th>
+                  <th className="pb-1 sm:pb-1 text-left">Material</th>
+                  <th className="pb-1 sm:pb-1 text-left">Location</th>
+                  <th className="pb-1 sm:pb-1 text-left">Weight</th>
                 </tr>
               </thead>
               <tbody>
                 {wasteData.marketRequirements.map((item, index) => (
                   <tr key={index} className="border-b border-gray-600">
-                    <td className="py-1">{item.name}</td>
-                    <td className="py-1">{item.material}</td>
-                    <td className="py-1">{item.location}</td>
-                    <td className="py-1">{item.weight} Tons</td>
+                    <td className="py-1 sm:py-1">{item.name}</td>
+                    <td className="py-1 sm:py-1">{item.material}</td>
+                    <td className="py-1 sm:py-1">{item.location}</td>
+                    <td className="py-1 sm:py-1">{item.weight} Tons</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-        <div className="mt-4 bg-gray-700 p-2 rounded-lg h-48">
+        <div className="bg-gray-700 p-1 sm:p-2 rounded-lg h-20 sm:h-32">
           <Pie data={pieData} options={pieOptions} />
         </div>
       </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-green-400">Select User</h2>
+          <div className="bg-gray-800 p-2 sm:p-4 rounded-lg shadow-lg w-11/12 sm:max-w-md">
+            <h2 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2 text-green-400">Select User</h2>
             <select
               value={selectedUser}
               onChange={(e) => setSelectedUser(e.target.value)}
-              className="w-full p-2 mb-4 bg-gray-700 text-white rounded"
+              className="w-full p-1 sm:p-2 mb-1 sm:mb-2 bg-gray-700 text-white rounded"
             >
               <option value="">Select a user</option>
               <option value="user1">User 1</option>
               <option value="user2">User 2</option>
             </select>
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-1 sm:space-x-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                className="bg-gray-500 text-white px-1 sm:px-2 py-1 sm:py-1 rounded hover:bg-gray-600"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleUserSelect('user')}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                className="bg-blue-500 text-white px-1 sm:px-2 py-1 sm:py-1 rounded hover:bg-blue-600"
                 disabled={!selectedUser}
               >
                 Proceed to Login

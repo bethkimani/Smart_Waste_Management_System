@@ -1,4 +1,3 @@
-// src/users/UserRoutes.jsx
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
@@ -28,15 +27,9 @@ const UserRoutes = ({ onLogout }) => {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row min-h-screen bg-gray-900 text-white">
-      <Sidebar onLogout={() => {
-        localStorage.removeItem('isAuthenticated');
-        localStorage.removeItem('loggedInRole');
-        localStorage.removeItem('selectedRole');
-        localStorage.removeItem('selectedUser');
-        onLogout();
-      }} />
-      <div className="flex-1 p-4 sm:p-8 overflow-auto">
+    <div className="flex h-screen bg-gray-900 text-white">
+      <Sidebar onLogout={onLogout} />
+      <div className="flex-1 p-1 sm:p-4 ml-0 sm:ml-64 overflow-hidden h-full">
         <Routes>
           <Route path="/dashboard" element={<Dashboard onLogout={onLogout} onRequestPickup={handleRequestPickup} />} />
           <Route path="/raise-request/*" element={<RaiseRequest />} />

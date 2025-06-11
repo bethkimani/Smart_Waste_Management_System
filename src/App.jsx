@@ -22,12 +22,7 @@ const AppContent = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log('Current pathname:', location.pathname);
-  console.log('loggedInRole:', loggedInRole);
-  console.log('isAuthenticated:', localStorage.getItem('isAuthenticated'));
-
   useEffect(() => {
-    // Sync loggedInRole with localStorage on mount
     const role = localStorage.getItem('loggedInRole');
     if (role && localStorage.getItem('isAuthenticated') === 'true') {
       setLoggedInRole(role);
@@ -37,13 +32,13 @@ const AppContent = () => {
   }, []);
 
   const handleRoleSelection = (role) => {
-    setLoggedInRole(null); // Reset to allow login rendering
+    setLoggedInRole(null);
     navigate(`/${role}s/login`);
   };
 
   const handleRequestPickup = (role) => {
     if (localStorage.getItem('isAuthenticated') !== 'true') {
-      handleRoleSelection(role); // Navigate to login if not authenticated
+      handleRoleSelection(role);
     } else {
       setIsRequestModalOpen(true);
     }
@@ -69,7 +64,7 @@ const AppContent = () => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       {!isAuthenticated && (
         <>
           <Header className="hidden md:block" />
@@ -90,12 +85,14 @@ const AppContent = () => {
         </>
       )}
       {isAuthenticated && loggedInRole && (
-        <Routes>
-          <Route path="/users/*" element={<UserRoutes onLogout={handleLogout} />} />
-          <Route path="/admins/*" element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
-          <Route path="/drivers/*" element={<DriverRoutes />} />
-          <Route path="*" element={<Navigate to={`/${loggedInRole}s/dashboard`} />} />
-        </Routes>
+        <div className="flex flex-col h-screen">
+          <Routes>
+            <Route path="/users/*" element={<UserRoutes onLogout={handleLogout} />} />
+            <Route path="/admins/*" element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
+            <Route path="/drivers/*" element={<DriverRoutes />} />
+            <Route path="*" element={<Navigate to={`/${loggedInRole}s/dashboard`} />} />
+          </Routes>
+        </div>
       )}
       {isAuthenticated && isRequestModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
