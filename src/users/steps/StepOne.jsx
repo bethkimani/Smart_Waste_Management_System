@@ -30,16 +30,15 @@ const StepOne = ({ formData, onUpdate }) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-teal-300">Enter Postcode</h2>
       <div className="bg-teal-800/50 p-4 rounded-lg">
         <select
           value={formData.postcode || ''}
           onChange={handlePostcodeChange}
-          className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+          className="w-full p-3 bg-teal-700 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
         >
           <option value="">Select Postcode</option>
           {postcodes.map((postcode, index) => (
-            <option key={index} value={postcode}>{postcode}</option>
+            <option key={index} value={postcode} className="bg-teal-700 text-white">{postcode}</option>
           ))}
         </select>
       </div>
@@ -47,7 +46,7 @@ const StepOne = ({ formData, onUpdate }) => {
         <select
           value={formData.address || ''}
           onChange={handleAddressChange}
-          className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+          className="w-full p-3 bg-teal-700 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
           disabled={!formData.postcode}
         >
           <option value="">Select Address</option>
@@ -55,7 +54,7 @@ const StepOne = ({ formData, onUpdate }) => {
             addresses
               .filter(addr => addr.postcode === formData.postcode)
               .map((addr, index) => (
-                <option key={index} value={addr.address}>{addr.address}</option>
+                <option key={index} value={addr.address} className="bg-teal-700 text-white">{addr.address}</option>
               ))}
         </select>
       </div>
