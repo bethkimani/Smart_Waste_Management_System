@@ -14,39 +14,41 @@ import AdminLogin from './admins/Login';
 import AdminSignup from './admins/AdminSignup';
 import DriverLogin from './drivers/Login';
 import DriverSignup from './drivers/DriverSignup';
-import RequestPickupModal from './components/RequestPickupModal';
 
 const AppContent = () => {
   const [loggedInRole, setLoggedInRole] = useState(localStorage.getItem('loggedInRole') || null);
-  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const role = localStorage.getItem('loggedInRole');
-    if (role && localStorage.getItem('isAuthenticated') === 'true') {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (role && isAuthenticated) {
       setLoggedInRole(role);
     } else {
       setLoggedInRole(null);
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('loggedInRole');
     }
   }, []);
 
   const handleRoleSelection = (role) => {
-    setLoggedInRole(null);
-    navigate(`/${role}s/login`);
+    setLoggedInRole(null); // Reset role before navigating to login
+    localStorage.removeItem('isAuthenticated'); // Ensure no auto-authentication
+    localStorage.removeItem('loggedInRole');
+    navigate(`/${role}s/login`); // Navigate to the login page for the selected role
   };
 
-  const handleRequestPickup = (role) => {
+  const handleRequestPickup = () => {
     if (localStorage.getItem('isAuthenticated') !== 'true') {
-      handleRoleSelection(role);
+      // Modal handling is now in Navbar, so no action here for unauthenticated users
     } else {
-      setIsRequestModalOpen(true);
+      navigate(`/${loggedInRole}s/raise-request`); // Navigate to raise-request for authenticated users
     }
   };
 
   const handleLogout = () => {
     setLoggedInRole(null);
-    setIsRequestModalOpen(false);
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('loggedInRole');
     navigate('/hero');
@@ -56,49 +58,67 @@ const AppContent = () => {
     setLoggedInRole(role);
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('loggedInRole', role);
-    if (role === 'user') navigate('/users/dashboard');
-    else if (role === 'admin') navigate('/admins/dashboard');
-    else if (role === 'driver') navigate('/drivers/dashboard');
+    navigate(`/${role}s/dashboard`); // Redirect to dashboard after login
   };
 
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
+  // Define routes where Header, Navbar, and Footer should be excluded
+  const excludeLayoutRoutes = [
+    '/users/login',
+    '/users/signup',
+    '/admins/login',
+    '/admins/signup',
+    '/drivers/login',
+    '/drivers/signup',
+    '/users/*', // Exclude all user dashboard routes
+    '/admins/*', // Exclude all admin dashboard routes
+    '/drivers/*', // Exclude all driver dashboard routes
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
-      {!isAuthenticated && (
+      {!excludeLayoutRoutes.some(route => location.pathname.startsWith(route)) && (
         <>
           <Header className="hidden md:block" />
-          <Navbar onRequestPickup={handleRequestPickup} />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Navigate to="/hero" />} />
-              <Route path="/hero" element={<Hero />} />
-              <Route path="/users/login" element={<Login onLoginSuccess={() => handleLoginSuccess('user')} />} />
-              <Route path="/users/signup" element={<Signup onLoginSuccess={() => handleLoginSuccess('user')} />} />
-              <Route path="/admins/login" element={<AdminLogin onLoginSuccess={() => handleLoginSuccess('admin')} />} />
-              <Route path="/admins/signup" element={<AdminSignup onLoginSuccess={() => handleLoginSuccess('admin')} />} />
-              <Route path="/drivers/login" element={<DriverLogin onLoginSuccess={() => handleLoginSuccess('driver')} />} />
-              <Route path="/drivers/signup" element={<DriverSignup onLoginSuccess={() => handleLoginSuccess('driver')} />} />
-            </Routes>
-          </main>
-          <Footer className="hidden md:block" />
+          <Navbar onRequestPickup={handleRequestPickup} handleRoleSelection={handleRoleSelection} />
         </>
       )}
-      {isAuthenticated && loggedInRole && (
-        <div className="flex flex-col h-screen">
-          <Routes>
-            <Route path="/users/*" element={<UserRoutes onLogout={handleLogout} />} />
-            <Route path="/admins/*" element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />} />
-            <Route path="/drivers/*" element={<DriverRoutes />} />
-            <Route path="*" element={<Navigate to={`/${loggedInRole}s/dashboard`} />} />
-          </Routes>
-        </div>
-      )}
-      {isAuthenticated && isRequestModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-100">
-          <RequestPickupModal onClose={() => setIsRequestModalOpen(false)} />
-        </div>
-      )}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Navigate to="/hero" />} />
+          <Route path="/hero" element={<Hero />} />
+          <Route path="/about" element={<div>About Page</div>} />
+          <Route path="/services" element={<div>Services Page</div>} />
+          <Route path="/company" element={<div>Company Page</div>} />
+          <Route path="/blog" element={<div>Blog Page</div>} />
+          <Route path="/contact" element={<div>Contact Page</div>} />
+          <Route path="/users/login" element={<Login onLoginSuccess={() => handleLoginSuccess('user')} />} />
+          <Route path="/users/signup" element={<Signup onLoginSuccess={() => handleLoginSuccess('user')} />} />
+          <Route path="/admins/login" element={<AdminLogin onLoginSuccess={() => handleLoginSuccess('admin')} />} />
+          <Route path="/admins/signup" element={<AdminSignup onLoginSuccess={() => handleLoginSuccess('admin')} />} />
+          <Route path="/drivers/login" element={<DriverLogin onLoginSuccess={() => handleLoginSuccess('driver')} />} />
+          <Route path="/drivers/signup" element={<DriverSignup onLoginSuccess={() => handleLoginSuccess('driver')} />} />
+          {isAuthenticated && loggedInRole && (
+            <>
+              <Route
+                path="/users/*"
+                element={<UserRoutes onLogout={handleLogout} onRequestPickup={handleRequestPickup} />}
+              />
+              <Route
+                path="/admins/*"
+                element={<AdminRoutes loggedInRole={loggedInRole} onLogout={handleLogout} onRequestPickup={handleRequestPickup} />}
+              />
+              <Route
+                path="/drivers/*"
+                element={<DriverRoutes onLogout={handleLogout} />}
+              />
+            </>
+          )}
+          <Route path="*" element={<Navigate to={isAuthenticated ? `/${loggedInRole}s/dashboard` : '/hero'} />} />
+        </Routes>
+      </main>
+      {!excludeLayoutRoutes.some(route => location.pathname.startsWith(route)) && <Footer className="hidden md:block" />}
     </div>
   );
 };

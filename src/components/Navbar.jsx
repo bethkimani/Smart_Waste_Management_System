@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthModal from './AuthModal';
 
-const Navbar = ({ onRequestPickup }) => {
+const Navbar = ({ onRequestPickup, handleRoleSelection }) => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   const openAuthModal = () => {
@@ -10,7 +10,7 @@ const Navbar = ({ onRequestPickup }) => {
   };
 
   const handleProceed = (role) => {
-    onRequestPickup(role); // Pass the selected role to App.jsx
+    handleRoleSelection(role); // Always navigate to login page for role selection
     setIsAuthModalOpen(false);
   };
 

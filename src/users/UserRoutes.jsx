@@ -11,16 +11,10 @@ import ViolationBilling from './ViolationBilling';
 import TrackingProcess from './TrackingProcess';
 import ReportHistory from './ReportHistory';
 import WasteChat from './WasteChat';
-import Login from './Login';
-import Signup from './Signup';
 
-const UserRoutes = ({ onLogout }) => {
+const UserRoutes = ({ onLogout, onRequestPickup }) => {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const loggedInRole = localStorage.getItem('loggedInRole');
-
-  const handleRequestPickup = (role) => {
-    // This will be passed to Dashboard
-  };
 
   if (!isAuthenticated || loggedInRole !== 'user') {
     return <Navigate to="/users/login" />;
@@ -29,9 +23,12 @@ const UserRoutes = ({ onLogout }) => {
   return (
     <div className="flex h-screen bg-gray-900 text-white">
       <Sidebar onLogout={onLogout} />
-      <div className="flex-1 p-1 sm:p-4 ml-16 overflow-hidden h-full"> {/* Reduced from ml-64 to ml-16 */}
+      <div className="flex-1 p-1 sm:p-4 ml-16 overflow-hidden h-full">
         <Routes>
-          <Route path="/dashboard" element={<Dashboard onLogout={onLogout} onRequestPickup={handleRequestPickup} />} />
+          <Route
+            path="/dashboard"
+            element={<Dashboard onLogout={onLogout} onRequestPickup={onRequestPickup} />}
+          />
           <Route path="/raise-request/*" element={<RaiseRequest />} />
           <Route path="/report-waste" element={<ReportWaste />} />
           <Route path="/collect-waste" element={<CollectWaste />} />

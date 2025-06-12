@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 const AuthModal = ({ onProceed, onClose }) => {
   const [role, setRole] = useState('user');
+  const navigate = useNavigate();
 
   const handleProceedClick = () => {
-    localStorage.setItem('selectedRole', role); // Store selected role
-    if (onProceed) onProceed(role); // Pass role to parent
+    if (onProceed) onProceed(role); // Pass role to parent (App.jsx)
     onClose(); // Close modal
   };
 
