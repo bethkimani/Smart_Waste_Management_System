@@ -26,8 +26,11 @@ const Login = ({ onLoginSuccess }) => {
   };
 
   return (
-    <section className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="max-w-md w-full p-6 rounded-md text-black bg-white">
+    <section
+      className="flex justify-center items-center h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url('/town.jpg')` }}
+    >
+      <div className="max-w-md w-full p-6 rounded-md text-black bg-white bg-opacity-90 shadow-lg">
         <h2 className="text-2xl font-bold mb-4">User Login</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -21,8 +21,11 @@ const Signup = ({ onLoginSuccess }) => {
   };
 
   return (
-    <section className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="max-w-md w-full p-6 rounded-md text-black bg-white">
+    <section
+      className="flex justify-center items-center h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url('/town.jpg')` }}
+    >
+      <div className="max-w-md w-full p-6 rounded-md text-black bg-white bg-opacity-90 shadow-lg">
         <h2 className="text-2xl font-bold mb-4">User Signup</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
