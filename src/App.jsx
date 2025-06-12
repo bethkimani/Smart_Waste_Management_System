@@ -63,22 +63,10 @@ const AppContent = () => {
 
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
-  // Define routes where Header, Navbar, and Footer should be excluded
-  const excludeLayoutRoutes = [
-    '/users/login',
-    '/users/signup',
-    '/admins/login',
-    '/admins/signup',
-    '/drivers/login',
-    '/drivers/signup',
-    '/users/*', // Exclude all user dashboard routes
-    '/admins/*', // Exclude all admin dashboard routes
-    '/drivers/*', // Exclude all driver dashboard routes
-  ];
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
-      {!excludeLayoutRoutes.some(route => location.pathname.startsWith(route)) && (
+      {/* Render layout components only for non-dashboard routes */}
+      {!location.pathname.startsWith('/users/') && !location.pathname.startsWith('/admins/') && !location.pathname.startsWith('/drivers/') && (
         <>
           <Header className="hidden md:block" />
           <Navbar onRequestPickup={handleRequestPickup} handleRoleSelection={handleRoleSelection} />
@@ -118,7 +106,9 @@ const AppContent = () => {
           <Route path="*" element={<Navigate to={isAuthenticated ? `/${loggedInRole}s/dashboard` : '/hero'} />} />
         </Routes>
       </main>
-      {!excludeLayoutRoutes.some(route => location.pathname.startsWith(route)) && <Footer className="hidden md:block" />}
+      {!location.pathname.startsWith('/users/') && !location.pathname.startsWith('/admins/') && !location.pathname.startsWith('/drivers/') && (
+        <Footer className="hidden md:block" />
+      )}
     </div>
   );
 };
