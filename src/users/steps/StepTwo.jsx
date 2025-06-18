@@ -1,35 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
-const StepTwo = ({ formData, onUpdate }) => {
-  const wasteTypesOptions = ['Construction Waste', 'Household Waste', 'Garden Waste', 'Commercial Waste'];
+const StepTwo = ({ formData, onUpdate, navigate }) => {
+  const [wasteTypes, setWasteTypes] = useState(formData.wasteTypes || []);
+
+  const handleWasteTypeChange = (e) => {
+    const value = e.target.value;
+    const updatedWasteTypes = wasteTypes.includes(value)
+      ? wasteTypes.filter((item) => item !== value)
+      : [...wasteTypes, value];
+    setWasteTypes(updatedWasteTypes);
+    onUpdate({ ...formData, wasteTypes: updatedWasteTypes });
+  };
+
+  const handleContinue = () => {
+    if (wasteTypes.length > 0) {
+      const nextStep = formData.step + 1;
+      onUpdate({ ...formData, step: nextStep });
+      navigate(`/users/raise-request/step/${nextStep}`);
+    }
+  };
+
+  const isContinueDisabled = wasteTypes.length === 0;
 
   return (
-    <div className="space-y-4">
-      <p className="text-lg text-gray-300">What type of waste are you disposing of? (Select all that apply)</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {wasteTypesOptions.map(type => (
-          <div
-            key={type}
-            className="bg-teal-800/50 p-4 rounded-lg border-2 border-transparent hover:border-teal-300 transition"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-gray-900 text-white p-4 sm:p-6 flex flex-col"
+    >
+      <div className="bg-teal-900/50 p-6 rounded-lg shadow-lg">
+        <h2 className="text-2xl sm:text-3xl font-bold text-teal-400 mb-4 text-center">Select Waste Type</h2>
+        <div className="space-y-4 max-h-[70vh] overflow-y-auto">
+          <label className="block">
+            <input
+              type="checkbox"
+              value="General Waste"
+              onChange={handleWasteTypeChange}
+              checked={wasteTypes.includes('General Waste')}
+              className="mr-2"
+            />
+            <span className="ml-2">General Waste</span>
+          </label>
+          <label className="block">
+            <input
+              type="checkbox"
+              value="Recyclable"
+              onChange={handleWasteTypeChange}
+              checked={wasteTypes.includes('Recyclable')}
+              className="mr-2"
+            />
+            <span className="ml-2">Recyclable</span>
+          </label>
+        </div>
+        <div className="mt-6 flex justify-between">
+          <button
+            onClick={() => {
+              const prevStep = formData.step - 1;
+              onUpdate({ ...formData, step: prevStep });
+              navigate(`/users/raise-request/step/${prevStep}`);
+            }}
+            className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
+            disabled={formData.step === 1}
           >
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                checked={formData.wasteTypes.includes(type)}
-                onChange={(e) => {
-                  const updatedWasteTypes = e.target.checked
-                    ? [...formData.wasteTypes, type]
-                    : formData.wasteTypes.filter(t => t !== type);
-                  onUpdate({ wasteTypes: updatedWasteTypes });
-                }}
-                className="text-teal-400 focus:ring-teal-400"
-              />
-              <span className="text-white">{type}</span>
-            </label>
-          </div>
-        ))}
+            Back
+          </button>
+          <button
+            onClick={handleContinue}
+            disabled={isContinueDisabled}
+            className="bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded disabled:bg-gray-500"
+          >
+            Continue
+          </button>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

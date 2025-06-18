@@ -1,8 +1,32 @@
 import React, { useState } from 'react';
-import { FaPaypal, FaGooglePay, FaCcVisa } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 import jsPDF from 'jspdf';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
-const StepSix = ({ formData, onUpdate, onComplete }) => {
+const StepSix = ({ formData, onUpdate, onComplete, navigate }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const orderSummary = {
@@ -17,10 +41,14 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
   };
 
   const handlePayment = () => {
-    if (formData.paymentMethod === 'card' && formData.cardNumber && formData.expiryDate && formData.securityCode) {
+    if (
+      (formData.paymentMethod === 'card' && formData.cardNumber && formData.expiryDate && formData.securityCode) ||
+      formData.paymentMethod === 'googlepay' ||
+      formData.paymentMethod === 'paypal'
+    ) {
       setIsConfirmModalOpen(true);
-    } else if (formData.paymentMethod === 'googlepay' || formData.paymentMethod === 'paypal') {
-      setIsConfirmModalOpen(true);
+    } else {
+      alert('Please select a payment method and fill required details.');
     }
   };
 
@@ -47,172 +75,211 @@ const StepSix = ({ formData, onUpdate, onComplete }) => {
   };
 
   const handleConfirmAccount = () => {
-    if (formData.firstName && formData.lastName && formData.email && formData.confirmEmail && formData.phone && formData.email === formData.confirmEmail) {
+    if (
+      formData.firstName &&
+      formData.lastName &&
+      formData.email &&
+      formData.confirmEmail &&
+      formData.phone &&
+      formData.email === formData.confirmEmail
+    ) {
       alert(`Confirmation email sent to ${formData.email}! Account created. Payment processed via ${formData.paymentMethod}.`);
       generateReceipt();
       onComplete();
+    } else {
+      alert('Please fill all fields and ensure emails match.');
     }
     setIsConfirmModalOpen(false);
   };
 
   return (
-    <div className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-6">
-      <div className="w-full sm:w-1/2 bg-teal-800/50 p-4 sm:p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-teal-300">Order Summary</h3>
-        <p className="mb-2">Delivery Address: {orderSummary.address}</p>
-        <p className="mb-2">Delivery: {new Date(orderSummary.deliveryDate).toLocaleDateString('en-GB')}</p>
-        <p className="mb-2">Collection: {new Date(orderSummary.collectionDate).toLocaleDateString('en-GB')}</p>
-        <p className="mb-2">{orderSummary.skipSize} Yard Skip - {orderSummary.hirePeriod}</p>
-        <p className="mb-2">Subtotal: £{orderSummary.price.toFixed(2)}</p>
-        <p className="mb-2">VAT (20%): £{orderSummary.vat.toFixed(2)}</p>
-        <p className="font-bold">Total: £{orderSummary.total.toFixed(2)}</p>
-      </div>
-      <div className="w-full sm:w-1/2 bg-teal-800/50 p-4 sm:p-6 rounded-lg">
-        <h3 className="text-xl font-semibold mb-4 text-teal-300">Payment Details</h3>
-        <div className="flex space-x-2 mb-4 flex-wrap">
-          <button
-            onClick={() => onUpdate({ paymentMethod: 'card' })}
-            className={`flex-1 p-3 rounded-l ${formData.paymentMethod === 'card' ? 'bg-purple-500' : 'bg-white/10'} text-white`}
-          >
-            Card
-          </button>
-          <button
-            onClick={() => onUpdate({ paymentMethod: 'googlepay' })}
-            className={`flex-1 p-3 ${formData.paymentMethod === 'googlepay' ? 'bg-purple-500' : 'bg-white/10'} text-white`}
-          >
-            Google Pay
-          </button>
-          <button
-            onClick={() => onUpdate({ paymentMethod: 'paypal' })}
-            className={`flex-1 p-3 rounded-r ${formData.paymentMethod === 'paypal' ? 'bg-purple-500' : 'bg-white/10'} text-white`}
-          >
-            PayPal
-          </button>
-        </div>
-        {formData.paymentMethod === 'card' && (
-          <div className="space-y-4">
-            <input
-              type="text"
-              value={formData.cardNumber}
-              onChange={(e) => onUpdate({ cardNumber: e.target.value })}
-              placeholder="Card Number"
-              className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-            />
-            <div className="flex space-x-2 flex-col sm:flex-row">
-              <input
-                type="text"
-                value={formData.expiryDate}
-                onChange={(e) => onUpdate({ expiryDate: e.target.value })}
-                placeholder="MM/YY"
-                className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-              />
-              <input
-                type="text"
-                value={formData.securityCode}
-                onChange={(e) => onUpdate({ securityCode: e.target.value })}
-                placeholder="CVC"
-                className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-              />
-            </div>
-            <select
-              value={formData.country}
-              onChange={(e) => onUpdate({ country: e.target.value })}
-              className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-            >
-              <option value="Kenya">Kenya</option>
-              <option value="UK">UK</option>
-              <option value="USA">USA</option>
-            </select>
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={formData.saveAsDefault}
-                onChange={(e) => onUpdate({ saveAsDefault: e.target.checked })}
-                className="mr-2 text-teal-400 focus:ring-teal-400"
-              />
-              <span className="text-gray-300">Save as default payment method</span>
-            </label>
-            <button
-              onClick={handlePayment}
-              className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition disabled:opacity-50"
-              disabled={!formData.cardNumber || !formData.expiryDate || !formData.securityCode}
-            >
-              Complete Payment
-            </button>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col sm:flex-row space-y-6 sm:space-y-0 sm:space-x-6"
+    >
+      <Card className="w-full sm:w-1/2 bg-gray-800 text-white">
+        <CardHeader>
+          <CardTitle className="text-teal-300">Order Summary</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-2">Delivery Address: {orderSummary.address}</p>
+          <p className="mb-2">Delivery: {new Date(orderSummary.deliveryDate).toLocaleDateString('en-GB')}</p>
+          <p className="mb-2">Collection: {new Date(orderSummary.collectionDate).toLocaleDateString('en-GB')}</p>
+          <p className="mb-2">{orderSummary.skipSize} Yard Skip - {orderSummary.hirePeriod}</p>
+          <p className="mb-2">Subtotal: £{orderSummary.price.toFixed(2)}</p>
+          <p className="mb-2">VAT (20%): £{orderSummary.vat.toFixed(2)}</p>
+          <p className="font-bold">Total: £{orderSummary.total.toFixed(2)}</p>
+        </CardContent>
+      </Card>
+      <Card className="w-full sm:w-1/2 bg-gray-800 text-white">
+        <CardHeader>
+          <CardTitle className="text-teal-300">Payment Details</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex space-x-2 mb-4 flex-wrap">
+            {['card', 'googlepay', 'paypal'].map(method => (
+              <Button
+                key={method}
+                onClick={() => onUpdate({ ...formData, paymentMethod: method })}
+                variant={formData.paymentMethod === method ? 'default' : 'outline'}
+                className={`flex-1 ${formData.paymentMethod === method ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-700 hover:bg-gray-600'}`}
+              >
+                {method.charAt(0).toUpperCase() + method.slice(1)}
+              </Button>
+            ))}
           </div>
-        )}
-        {(formData.paymentMethod === 'googlepay' || formData.paymentMethod === 'paypal') && (
-          <button
-            onClick={handlePayment}
-            className="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition"
-          >
-            Pay with {formData.paymentMethod === 'googlepay' ? 'Google Pay' : 'PayPal'}
-          </button>
-        )}
-      </div>
-      {isConfirmModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-teal-800/50 p-4 sm:p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-teal-300">Create Account</h2>
-            <p className="mb-4 text-gray-300">To track your order, we'll create an account for you.</p>
+          {formData.paymentMethod === 'card' && (
             <div className="space-y-4">
-              <div className="flex space-x-2 flex-col sm:flex-row">
-                <input
+              <Input
+                type="text"
+                value={formData.cardNumber}
+                onChange={(e) => onUpdate({ ...formData, cardNumber: e.target.value })}
+                placeholder="Card Number"
+                className="bg-gray-700 text-white"
+              />
+              <div className="flex space-x-2">
+                <Input
                   type="text"
-                  value={formData.firstName}
-                  onChange={(e) => onUpdate({ firstName: e.target.value })}
-                  placeholder="First Name"
-                  className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                  value={formData.expiryDate}
+                  onChange={(e) => onUpdate({ ...formData, expiryDate: e.target.value })}
+                  placeholder="MM/YY"
+                  className="w-1/2 bg-gray-700 text-white"
                 />
-                <input
+                <Input
                   type="text"
-                  value={formData.lastName}
-                  onChange={(e) => onUpdate({ lastName: e.target.value })}
-                  placeholder="Last Name"
-                  className="w-full sm:w-1/2 p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
+                  value={formData.securityCode}
+                  onChange={(e) => onUpdate({ ...formData, securityCode: e.target.value })}
+                  placeholder="CVC"
+                  className="w-1/2 bg-gray-700 text-white"
                 />
               </div>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => onUpdate({ email: e.target.value })}
-                placeholder="Email"
-                className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-              />
-              <input
-                type="email"
-                value={formData.confirmEmail}
-                onChange={(e) => onUpdate({ confirmEmail: e.target.value })}
-                placeholder="Confirm Email"
-                className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-              />
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => onUpdate({ phone: e.target.value })}
-                placeholder="Phone"
-                className="w-full p-3 bg-white/10 border border-teal-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 text-white"
-              />
-            </div>
-            <div className="flex justify-between mt-4 flex-col sm:flex-row space-y-4 sm:space-y-0">
-              <button
-                onClick={() => setIsConfirmModalOpen(false)}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition w-full sm:w-auto"
+              <Select value={formData.country} onValueChange={(value) => onUpdate({ ...formData, country: value })}>
+                <SelectTrigger className="bg-gray-700">
+                  <SelectValue placeholder="Select Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Kenya">Kenya</SelectItem>
+                  <SelectItem value="UK">UK</SelectItem>
+                  <SelectItem value="USA">USA</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="flex items-center">
+                <Checkbox
+                  id="saveAsDefault"
+                  checked={formData.saveAsDefault}
+                  onCheckedChange={(checked) => onUpdate({ ...formData, saveAsDefault: checked })}
+                />
+                <Label htmlFor="saveAsDefault" className="ml-2 text-gray-300">
+                  Save as default payment method
+                </Label>
+              </div>
+              <Button
+                onClick={handlePayment}
+                disabled={!formData.cardNumber || !formData.expiryDate || !formData.securityCode}
+                className="w-full bg-purple-500 hover:bg-purple-600"
               >
-                Back
-              </button>
-              <button
-                onClick={handleConfirmAccount}
-                className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition disabled:opacity-50 w-full sm:w-auto"
-                disabled={!formData.firstName || !formData.lastName || !formData.email || !formData.confirmEmail || !formData.phone || formData.email !== formData.confirmEmail}
-              >
-                Confirm
-              </button>
+                Complete Payment
+              </Button>
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+          )}
+          {(formData.paymentMethod === 'googlepay' || formData.paymentMethod === 'paypal') && (
+            <Button
+              onClick={handlePayment}
+              className="w-full bg-purple-500 hover:bg-purple-600"
+            >
+              Pay with {formData.paymentMethod === 'googlepay' ? 'Google Pay' : 'PayPal'}
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+      <div className="flex justify-between mt-6">
+        <button
+          onClick={() => {
+            const prevStep = formData.step - 1;
+            onUpdate({ ...formData, step: prevStep });
+            navigate(`/users/raise-request/step/${prevStep}`);
+          }}
+          className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
+        >
+          Back
+        </button>
+      </div>
+      <AnimatePresence>
+        {isConfirmModalOpen && (
+          <Dialog open={isConfirmModalOpen} onOpenChange={setIsConfirmModalOpen}>
+            <DialogContent className="bg-gray-800 text-white">
+              <DialogHeader>
+                <DialogTitle className="text-teal-300">Create Account</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="flex space-x-2">
+                  <Input
+                    type="text"
+                    value={formData.firstName}
+                    onChange={(e) => onUpdate({ ...formData, firstName: e.target.value })}
+                    placeholder="First Name"
+                    className="w-1/2 bg-gray-700 text-white"
+                  />
+                  <Input
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) => onUpdate({ ...formData, lastName: e.target.value })}
+                    placeholder="Last Name"
+                    className="w-1/2 bg-gray-700 text-white"
+                  />
+                </div>
+                <Input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => onUpdate({ ...formData, email: e.target.value })}
+                  placeholder="Email"
+                  className="bg-gray-700 text-white"
+                />
+                <Input
+                  type="email"
+                  value={formData.confirmEmail}
+                  onChange={(e) => onUpdate({ ...formData, confirmEmail: e.target.value })}
+                  placeholder="Confirm Email"
+                  className="bg-gray-700 text-white"
+                />
+                <Input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => onUpdate({ ...formData, phone: e.target.value })}
+                  placeholder="Phone"
+                  className="bg-gray-700 text-white"
+                />
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="secondary"
+                  onClick={() => setIsConfirmModalOpen(false)}
+                  className="bg-gray-600 hover:bg-gray-500"
+                >
+                  Back
+                </Button>
+                <Button
+                  onClick={handleConfirmAccount}
+                  disabled={
+                    !formData.firstName ||
+                    !formData.lastName ||
+                    !formData.email ||
+                    !formData.confirmEmail ||
+                    !formData.phone ||
+                    formData.email !== formData.confirmEmail
+                  }
+                  className="bg-purple-500 hover:bg-purple-600"
+                >
+                  Confirm
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 
